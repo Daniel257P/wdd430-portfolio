@@ -1,1 +1,1 @@
-# wdd430-portfolio-Daniel
+# WDD430-portfolio
