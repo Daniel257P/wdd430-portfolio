@@ -1,4 +1,5 @@
-export default function Footer() {
+export default async function Footer() {
+  'use cache';
   return (
     <footer className="mt-auto bg-slate-900 text-white">
         <div className="max-w-4xl mx-auto p-4 text-center">
