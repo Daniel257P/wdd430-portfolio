@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NavLinks from '@/components/NavLinks';
 
 export default function Header() {
   return (
@@ -7,10 +8,7 @@ export default function Header() {
             <Link className="text-xl font-bold" href="/">
                 Daniel Paulino
             </Link>
-            <ul className="flex gap-6">
-                <li><Link className="hover:underline" href="/">Home</Link></li>
-                <li><Link className="hover:underline" href="/about">About</Link></li>
-            </ul>
+            <NavLinks />
         </nav>
     </header>
   );
