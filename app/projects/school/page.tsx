@@ -1,16 +1,9 @@
 import { Suspense } from "react";
-import { connection } from "next/server";
-import ProjectList from "@/components/ProjectList";
-import { getProjects } from "@/lib/projects-db";
+import ProjectCardSkeleton from "@/components/ProjectCardSkeleton";
+import SchoolProjectList from "@/components/SchoolProjectList";
 
-async function SchoolProjects() {
-  // Opt into dynamic rendering: run on every request, never prerender.
-  await connection();
-  const projects = await getProjects("school");
-
-  return <ProjectList projects={projects} />;
-}
-
+// Component-level streaming: the heading renders immediately, and only
+// <SchoolProjectList /> waits for data, showing the skeleton meanwhile.
 export default function SchoolProjectsPage() {
   return (
     <>
@@ -19,8 +12,8 @@ export default function SchoolProjectsPage() {
           School Projects
         </h1>
       </section>
-      <Suspense fallback={<p className="py-6">Loading projects...</p>}>
-        <SchoolProjects />
+      <Suspense fallback={<ProjectCardSkeleton />}>
+        <SchoolProjectList />
       </Suspense>
     </>
   );
