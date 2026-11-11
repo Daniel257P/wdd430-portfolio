@@ -1,15 +1,12 @@
 import { Suspense } from "react";
-import { headers } from "next/headers";
+import { connection } from "next/server";
 import ProjectList from "@/components/ProjectList";
-import type { Project } from "@/lib/projects-db";
+import { getProjects } from "@/lib/projects-db";
 
 async function Projects() {
-  const headersList = await headers();
-  const host = headersList.get("host");
-  const protocol = headersList.get("x-forwarded-proto") ?? "http";
-
-  const res = await fetch(`${protocol}://${host}/api/projects`);
-  const projects: Project[] = await res.json();
+  // Opt into dynamic rendering: run on every request, never prerender.
+  await connection();
+  const projects = await getProjects();
 
   return <ProjectList projects={projects} />;
 }
