@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import ProjectList from "@/components/ProjectList";
 import ProjectSearch from "@/components/ProjectSearch";
 import Pagination from "@/components/Pagination";
@@ -42,7 +43,13 @@ export default function ProjectsPage(props: { searchParams: SearchParams }) {
         </h1>
       </section>
 
-      <div className="my-6">
+      <div className="my-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+        <Link
+          href="/projects/create"
+          className="shrink-0 rounded-md bg-slate-900 px-4 py-2 text-center text-white hover:bg-slate-700"
+        >
+          + Create Project
+        </Link>
         {/* useSearchParams in a Client Component needs a Suspense boundary */}
         <Suspense fallback={<div className="h-10 rounded-md bg-slate-200" />}>
           <ProjectSearch />

@@ -24,7 +24,7 @@ export default function ProjectSearch() {
   }, 300);
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <label htmlFor="project-search" className="sr-only">
         Search projects
       </label>
