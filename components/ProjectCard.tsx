@@ -6,13 +6,17 @@ interface ProjectCardProps {
   title: string;
   description: string;
   technologies: string[];
+  year_completed?: number | null;
   link?: string;
 }
 
-export default function ProjectCard({ id, title, description, technologies, link }: ProjectCardProps) {
+export default function ProjectCard({ id, title, description, technologies, year_completed, link }: ProjectCardProps) {
   return (
     <article className="flex flex-col bg-white shadow-md rounded-lg p-6">
       <h3 className="text-xl font-semibold text-slate-900 mb-2">{title}</h3>
+      {year_completed && (
+        <p className="text-sm text-slate-500 mb-2">Completed {year_completed}</p>
+      )}
       <p className="text-slate-700 mb-4">{description}</p>
       <ul className="flex flex-wrap gap-2 mb-4">
         {technologies.map((tech) => (

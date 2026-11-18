@@ -7,6 +7,7 @@ export interface Project {
   description: string;
   type: 'opensource' | 'school';
   technologies: string[];
+  year_completed: number | null; // column added in week 04; older rows may be null
   link?: string;
 }
 

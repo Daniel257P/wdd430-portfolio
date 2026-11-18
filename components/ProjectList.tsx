@@ -5,6 +5,7 @@ export interface Project {
     title: string;
     description: string;
     technologies: string[];
+    year_completed?: number | null;
     link?: string;
 }
 
