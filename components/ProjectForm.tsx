@@ -117,7 +117,7 @@ export default function ProjectForm({ action, project, submitLabel }: ProjectFor
           className={`rounded-md bg-slate-900 px-4 py-2 text-white hover:bg-slate-700 disabled:opacity-50 ${focusRing}`}>
           {isPending ? 'Saving...' : submitLabel}
         </button>
-        <Link href="/projects"
+        <Link href="/dashboard/projects"
           className={`rounded-md bg-slate-200 px-4 py-2 text-slate-900 hover:bg-slate-300 ${focusRing}`}>
           Cancel
         </Link>

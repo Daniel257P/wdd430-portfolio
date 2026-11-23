@@ -3,7 +3,50 @@
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { AuthError } from 'next-auth';
 import { z } from 'zod';
+import { auth, signIn, signOut } from '@/auth';
+
+// ---------- Authentication ----------
+
+// Login form action. Returns an error message, or redirects on success.
+export async function authenticate(
+  _prevState: string | undefined,
+  formData: FormData
+): Promise<string | undefined> {
+  try {
+    await signIn('credentials', formData); // formData includes redirectTo
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return error.type === 'CredentialsSignin'
+        ? 'Invalid email or password.'
+        : 'Something went wrong. Please try again.';
+    }
+    throw error; // a successful sign-in "throws" a redirect; let it through
+  }
+}
+
+export async function signOutAction() {
+  await signOut({ redirectTo: '/' });
+}
+
+// proxy.ts protects the /dashboard pages, but Server Actions can be called
+// directly with a POST request, so every action that changes data checks too.
+async function requireOwnerSession() {
+  const session = await auth();
+  if (!session?.user) {
+    throw new Error('Not authenticated');
+  }
+  return session;
+}
+
+// Pages that show projects and must refresh after a change.
+function revalidateProjectPages() {
+  revalidatePath('/projects', 'layout'); // /projects and its sub-pages
+  revalidatePath('/dashboard/projects');
+}
+
+// ---------- Projects ----------
 
 // Rules every project must follow before it can be saved.
 const ProjectFormSchema = z.object({
@@ -66,6 +109,8 @@ export async function createProject(
   _prevState: ProjectFormState,
   formData: FormData
 ): Promise<ProjectFormState> {
+  await requireOwnerSession();
+
   const validated = validateProjectForm(formData);
   if (!validated.success) {
     return {
@@ -96,8 +141,8 @@ export async function createProject(
     return { message: 'Database error: could not create the project.', values: formValues(formData) };
   }
 
-  revalidatePath('/projects');
-  redirect('/projects'); // outside try/catch: redirect works by throwing
+  revalidateProjectPages();
+  redirect('/dashboard/projects'); // outside try/catch: redirect works by throwing
 }
 
 // `id` comes first because the edit page calls updateProject.bind(null, id).
@@ -106,6 +151,8 @@ export async function updateProject(
   _prevState: ProjectFormState,
   formData: FormData
 ): Promise<ProjectFormState> {
+  await requireOwnerSession();
+
   const validated = validateProjectForm(formData);
   if (!validated.success) {
     return {
@@ -133,12 +180,14 @@ export async function updateProject(
     return { message: 'Database error: could not update the project.', values: formValues(formData) };
   }
 
-  revalidatePath('/projects');
-  redirect('/projects');
+  revalidateProjectPages();
+  redirect('/dashboard/projects');
 }
 
 // Each card's delete form sends a hidden "id" field, so only that row is removed.
 export async function deleteProject(formData: FormData) {
+  await requireOwnerSession();
+
   const id = Number(formData.get('id'));
   if (!Number.isInteger(id) || id < 1) return;
 
@@ -146,9 +195,9 @@ export async function deleteProject(formData: FormData) {
     await sql`DELETE FROM projects WHERE id = ${id}`;
   } catch (error) {
     console.error(error); // full details stay in the server logs
-    // A friendly message for app/projects/error.tsx to display.
+    // A friendly message for the error.tsx boundary to display.
     throw new Error('Failed to delete project. Please try again.');
   }
 
-  revalidatePath('/projects');
+  revalidateProjectPages();
 }
