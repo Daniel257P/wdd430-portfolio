@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ProjectActions from "./ProjectActions";
 
 interface ProjectCardProps {
@@ -13,7 +14,12 @@ interface ProjectCardProps {
 export default function ProjectCard({ id, title, description, technologies, year_completed, link, showActions = false }: ProjectCardProps) {
   return (
     <article className="flex flex-col bg-white shadow-md rounded-lg p-6">
-      <h3 className="text-xl font-semibold text-slate-900 mb-2">{title}</h3>
+      <h3 className="text-xl font-semibold text-slate-900 mb-2">
+        {/* Opens the public detail page, which has its own metadata. */}
+        <Link href={`/projects/${id}`} className="hover:underline">
+          {title}
+        </Link>
+      </h3>
       {year_completed && (
         <p className="text-sm text-slate-500 mb-2">Completed {year_completed}</p>
       )}

@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import SignOutButton from "@/components/SignOutButton";
+
+// Applies to every /dashboard page. Private pages shouldn't show up in Google.
+export const metadata: Metadata = {
+  title: "Dashboard",
+  robots: { index: false, follow: false },
+};
 
 // Shared by every page under /dashboard (protected by proxy.ts).
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

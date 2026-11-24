@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import ProjectList from "@/components/ProjectList";
 import { getProjects } from "@/lib/projects-db";
+
+export const metadata: Metadata = {
+  title: "Open Source",
+  description: "Open source projects built by Daniel Paulino.",
+};
 
 // Page-level streaming: no <Suspense> here. The whole page waits for the
 // data, and app/projects/opensource/loading.tsx is shown in the meantime.

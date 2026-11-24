@@ -14,9 +14,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Site-wide defaults. Pages can override any field with their own metadata.
 export const metadata: Metadata = {
-  title: "Daniel Paulino | Portfolio",
-  description: "Portfolio of Daniel Paulino, showcasing web development projects built with Next.js, React and Tailwind CSS."
+  title: {
+    // Used when a page doesn't set its own title (e.g. the home page).
+    default: "Daniel Paulino | Project Portfolio",
+    // A page with title "About" becomes "About | Project Portfolio".
+    template: "%s | Project Portfolio",
+  },
+  description:
+    "Portfolio of Daniel Paulino, showcasing web development projects built with Next.js, React and Tailwind CSS.",
+  // Turns relative URLs (like /opengraph-image.png) into absolute ones,
+  // which social networks need for link previews.
+  metadataBase: new URL("https://wdd430-portfolio-gray.vercel.app"),
+  openGraph: {
+    siteName: "Daniel Paulino | Project Portfolio",
+    type: "website",
+    locale: "en_US",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

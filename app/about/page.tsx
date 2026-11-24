@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import SkillCard from "@/components/SkillCard";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn about Daniel Paulino, a BYU-Pathway web development student, and his skills.",
+};
 
 export default function About() {
   return (

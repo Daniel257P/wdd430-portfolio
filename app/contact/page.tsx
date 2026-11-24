@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description: "Get in touch with Daniel Paulino.",
+};
+
 export default function ContactPage() {
   return (
     <section className="flex flex-col items-center justify-center py-12">

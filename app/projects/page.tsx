@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import ProjectList from "@/components/ProjectList";
 import ProjectSearch from "@/components/ProjectSearch";
 import Pagination from "@/components/Pagination";
 import ProjectCardSkeleton from "@/components/ProjectCardSkeleton";
 import { fetchFilteredProjects, fetchProjectsPages } from "@/lib/projects-db";
+
+export const metadata: Metadata = {
+  title: "Projects",
+  description:
+    "Search and browse all of Daniel Paulino's web development projects.",
+};
 
 type SearchParams = Promise<{ query?: string; page?: string }>;
 
